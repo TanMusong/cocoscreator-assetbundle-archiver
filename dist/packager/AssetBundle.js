@@ -53,8 +53,8 @@ var AssetBundle;
                 console.log(`Assetbundle [${key}] 变更，开始打包`);
                 const zipCacheOutputDir = path_1.default.join(outputDir, 'cache');
                 const packageOutputDir = path_1.default.join(outputDir, 'package');
-                FileUtils_1.default.rm(zipCacheOutputDir);
                 FileUtils_1.default.mkdir(zipCacheOutputDir);
+                FileUtils_1.default.mkdir(packageOutputDir);
                 const supports = [];
                 const newVersion = previousRecord.version + 1;
                 for (const versionItem of existVersions) {
@@ -105,6 +105,7 @@ var AssetBundle;
             const configFileName = `assetbundle_${key}_${mainVersion}.json`;
             console.log(`保存 [${key}] 配置文件：${configFileName}`);
             const configFilePath = path_1.default.join(outputDir, 'config', configFileName);
+            FileUtils_1.default.mkdir(path_1.default.dirname(configFilePath));
             fs_1.default.writeFileSync(configFilePath, JSON.stringify(config));
             FileUtils_1.default.rm(bundleDir);
             console.log(`-----------------------------------------------------AssetBundle [${key}] 打包结束-----------------------------------------------------`);

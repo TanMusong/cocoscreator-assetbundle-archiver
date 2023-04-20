@@ -83,8 +83,8 @@ namespace AssetBundle {
             const zipCacheOutputDir = path.join(outputDir, 'cache');
             const packageOutputDir = path.join(outputDir, 'package');
 
-            FileUtils.rm(zipCacheOutputDir);
             FileUtils.mkdir(zipCacheOutputDir);
+            FileUtils.mkdir(packageOutputDir);
 
             const supports: AssetBundleData[] = [];
             const newVersion = previousRecord.version + 1;
@@ -146,6 +146,9 @@ namespace AssetBundle {
         const configFileName = `assetbundle_${key}_${mainVersion}.json`;
         console.log(`保存 [${key}] 配置文件：${configFileName}`);
         const configFilePath = path.join(outputDir, 'config', configFileName);
+        FileUtils.mkdir(path.dirname(configFilePath));
+
+
         fs.writeFileSync(configFilePath, JSON.stringify(config));
 
         FileUtils.rm(bundleDir);//删除原构建目录内的AssetBundle资源
