@@ -60,6 +60,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const appVersion = ProcessUtils_1.default.getArg('--version', value => !!value && !value.startsWith('--'));
     const outputDir = ProcessUtils_1.default.getArg('--output', value => !!value && !value.startsWith('--')) || path_1.default.join(project, 'build', 'asset-bundle', platform, mode);
     const recordDir = ProcessUtils_1.default.getArg('--record', value => !!value && !value.startsWith('--')) || path_1.default.join(project, 'asset-bundle');
+    const notitle = !!ProcessUtils_1.default.haveArg('--cinotitle');
     const ciResult = [];
     const results = [];
     for (let i = 0, length = keys.length; i < length; i++) {
@@ -68,7 +69,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         results.push(result);
         i > 0 && ciResult.push('line');
         if (result.size >= 0) {
-            length > 1 && ciResult.push(`AssetBundle${result.key}打包`);
+            notitle || ciResult.push(`AssetBundle${result.key}打包`);
             ciResult.push(`主包版本=${result.mainVersion}`);
             ciResult.push(`子包版本=${result.version}`);
             ciResult.push(`新增文件=${result.added}`);
@@ -83,7 +84,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             }
         }
         else {
-            ciResult.push(`AssetBundle${length > 1 ? result.key : ''}没有需要打包的更新`);
+            ciResult.push(`AssetBundle${notitle ? '' : result.key}没有需要打包的更新`);
         }
     }
     const backup = ProcessUtils_1.default.getArg('--record', value => !!value && !value.startsWith('--'));

@@ -51,6 +51,8 @@ const main = async (): Promise<number> => {
     const outputDir = ProcessUtils.getArg('--output', value => !!value && !value.startsWith('--')) || path.join(project, 'build', 'asset-bundle', platform, mode)
     const recordDir = ProcessUtils.getArg('--record', value => !!value && !value.startsWith('--')) || path.join(project, 'asset-bundle');
 
+    const notitle = !!ProcessUtils.haveArg('--cinotitle');
+
     const ciResult: string[] = [];
     const results: AssetBundle.Result[] = [];
     for (let i = 0, length = keys.length; i < length; i++) {
@@ -59,7 +61,7 @@ const main = async (): Promise<number> => {
         results.push(result);
         i > 0 && ciResult.push('line');
         if (result.size >= 0) {
-            length > 1 && ciResult.push(`AssetBundle${result.key}打包`);
+            notitle || ciResult.push(`AssetBundle${result.key}打包`);
             ciResult.push(`主包版本=${result.mainVersion}`);
             ciResult.push(`子包版本=${result.version}`);
             ciResult.push(`新增文件=${result.added}`);
@@ -73,7 +75,7 @@ const main = async (): Promise<number> => {
                     ciResult.push(`增量支持版本=${result.supports.shift()} - ${result.supports.pop()}`);
             }
         } else {
-            ciResult.push(`AssetBundle${length > 1 ? result.key : ''}没有需要打包的更新`)
+            ciResult.push(`AssetBundle${notitle ? '' : result.key}没有需要打包的更新`)
         }
     }
 
