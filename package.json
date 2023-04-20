@@ -1,0 +1,21 @@
+{
+  "name": "asset-bundle-packager",
+  "version": "3.5.6",
+  "description": "CocosCreator AssetBundle Packager",
+  "keywords": [
+    "CocosCreator"
+  ],
+  "scripts": {},
+  "bin": {
+    "abpkg": "./bin/assetbundlepackager"
+  },
+  "author": "TanMusong",
+  "dependencies": {
+    "archiver": "^5.3.1"
+  },
+  "devDependencies": {
+    "@types/archiver": "^5.3.2",
+    "@types/request": "^2.48.8",
+    "typescript": "^5.0.4"
+  }
+}
