@@ -1,15 +1,24 @@
 {
-  "name": "asset-bundle-packager",
-  "version": "1.0.1",
+  "name": "cocoscreator-assetbundle-packager",
+  "version": "1.0.0",
   "description": "CocosCreator AssetBundle Packager",
   "keywords": [
     "CocosCreator"
   ],
   "scripts": {},
   "bin": {
-    "abpkg": "./bin/assetbundlepackager"
+    "abpkg": "./bin/packager"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanMusong/cocoscreator-assetbundle-packager.git"
   },
   "author": "TanMusong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TanMusong/cocoscreator-assetbundle-packager/issues"
+  },
+  "homepage": "https://github.com/TanMusong/cocoscreator-assetbundle-packager#readme",
   "dependencies": {
     "archiver": "^5.3.1"
   },
