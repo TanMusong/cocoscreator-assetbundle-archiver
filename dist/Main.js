@@ -58,7 +58,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const xxtea = ProcessUtils_1.default.getArg('--xxtea', value => !!value && !value.startsWith('--')) || '';
     const zipCompressJs = !!ProcessUtils_1.default.haveArg('--zipCompressJs');
     const appVersion = ProcessUtils_1.default.getArg('--version', value => !!value && !value.startsWith('--'));
-    const outputDir = ProcessUtils_1.default.getArg('--output', value => !!value && !value.startsWith('--')) || path_1.default.join(project, 'build', 'asset-bundle', platform);
+    const outputDir = ProcessUtils_1.default.getArg('--output', value => !!value && !value.startsWith('--')) || path_1.default.join(project, 'build', 'asset-bundle', platform, mode);
     const recordDir = ProcessUtils_1.default.getArg('--record', value => !!value && !value.startsWith('--')) || path_1.default.join(project, 'asset-bundle');
     const ciResult = [];
     const results = [];

@@ -48,7 +48,7 @@ const main = async (): Promise<number> => {
     const xxtea = ProcessUtils.getArg('--xxtea', value => !!value && !value.startsWith('--')) || '';
     const zipCompressJs = !!ProcessUtils.haveArg('--zipCompressJs');
     const appVersion = ProcessUtils.getArg('--version', value => !!value && !value.startsWith('--'));
-    const outputDir = ProcessUtils.getArg('--output', value => !!value && !value.startsWith('--')) || path.join(project, 'build', 'asset-bundle', platform)
+    const outputDir = ProcessUtils.getArg('--output', value => !!value && !value.startsWith('--')) || path.join(project, 'build', 'asset-bundle', platform, mode)
     const recordDir = ProcessUtils.getArg('--record', value => !!value && !value.startsWith('--')) || path.join(project, 'asset-bundle');
 
     const ciResult: string[] = [];
