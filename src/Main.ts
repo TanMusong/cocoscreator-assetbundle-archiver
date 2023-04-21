@@ -83,7 +83,7 @@ const main = async (): Promise<number> => {
     }
 
 
-    const backup = ProcessUtils.getArg('--record', value => !!value && !value.startsWith('--'));
+    const backup = ProcessUtils.getArg('--backup', value => !!value && !value.startsWith('--'));
     if (backup) {
         const dateDir = (new Date()).toLocaleString().replace(/[\/\\:]/gm, '-');
         const backupDir = path.join(backup, dateDir);
