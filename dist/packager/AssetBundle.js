@@ -49,12 +49,14 @@ var AssetBundle;
                 size: 0
             };
             const config = { version: previousRecord.version, supports: previousRecord.supports };
+            const packageOutputDir = path_1.default.join(outputDir, 'package');
+            const configOutputDir = path_1.default.join(outputDir, 'config');
+            FileUtils_1.default.mkdir(packageOutputDir);
+            FileUtils_1.default.mkdir(configOutputDir);
             if (md5Compare.changed.length || md5Compare.added.length) {
                 console.log(`Assetbundle [${key}] 变更，开始打包`);
                 const zipCacheOutputDir = path_1.default.join(outputDir, 'cache');
-                const packageOutputDir = path_1.default.join(outputDir, 'package');
                 FileUtils_1.default.mkdir(zipCacheOutputDir);
-                FileUtils_1.default.mkdir(packageOutputDir);
                 const supports = [];
                 const newVersion = previousRecord.version + 1;
                 for (const versionItem of existVersions) {
@@ -74,6 +76,7 @@ var AssetBundle;
                         FileUtils_1.default.mkdir(path_1.default.dirname(outPath));
                         fs_1.default.copyFileSync(path_1.default.join(bundleDir, value.path), outPath);
                     });
+                    fs_1.default.writeFileSync(path_1.default.join(zipCacheDir, 'assetbundle_version'), `${newVersion}`);
                     const zipOutFile = path_1.default.join(packageOutputDir, `assetbundle_${key}_${versionItem}_${newVersion}.zip`);
                     const fileCount = FileUtils_1.default.fileCount(zipCacheDir, true);
                     yield FileUtils_1.default.zipdir(zipCacheDir, zipOutFile);
@@ -83,6 +86,7 @@ var AssetBundle;
                     supports.push({ version: versionItem, size: zipStat.size, files: fileCount, md5: zipMD5 });
                 }
                 FileUtils_1.default.rm(zipCacheOutputDir);
+                fs_1.default.writeFileSync(path_1.default.join(bundleDir, 'assetbundle_version'), `${newVersion}`);
                 const zipOutFile = path_1.default.join(packageOutputDir, `assetbundle_${key}_${newVersion}.zip`);
                 const fileCount = FileUtils_1.default.fileCount(bundleDir, true);
                 yield FileUtils_1.default.zipdir(bundleDir, zipOutFile);
@@ -104,7 +108,7 @@ var AssetBundle;
             }
             const configFileName = `assetbundle_${key}_${mainVersion}.json`;
             console.log(`保存 [${key}] 配置文件：${configFileName}`);
-            const configFilePath = path_1.default.join(outputDir, 'config', configFileName);
+            const configFilePath = path_1.default.join(configOutputDir, configFileName);
             FileUtils_1.default.mkdir(path_1.default.dirname(configFilePath));
             fs_1.default.writeFileSync(configFilePath, JSON.stringify(config));
             FileUtils_1.default.rm(bundleDir);

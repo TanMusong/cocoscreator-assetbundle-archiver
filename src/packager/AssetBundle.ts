@@ -7,6 +7,7 @@ namespace AssetBundle {
 
     const START_VERSION = 1;
     const VERSION_SUPPORT = 50;
+
     type AssetBundleData = { version: number, size: number, files: number, md5: string };
     type Config = { version: number, supports: AssetBundleData[] };
     type AssetBundleRecord = Config & { md5: MD5Utils.FileMD5[] };
@@ -77,14 +78,17 @@ namespace AssetBundle {
 
         const config: Config = { version: previousRecord.version, supports: previousRecord.supports };
 
+        const packageOutputDir = path.join(outputDir, 'package');
+        const configOutputDir = path.join(outputDir, 'config');
+
+        FileUtils.mkdir(packageOutputDir);
+        FileUtils.mkdir(configOutputDir);
+
         if (md5Compare.changed.length || md5Compare.added.length) {
             console.log(`Assetbundle [${key}] 变更，开始打包`);
 
             const zipCacheOutputDir = path.join(outputDir, 'cache');
-            const packageOutputDir = path.join(outputDir, 'package');
-
             FileUtils.mkdir(zipCacheOutputDir);
-            FileUtils.mkdir(packageOutputDir);
 
             const supports: AssetBundleData[] = [];
             const newVersion = previousRecord.version + 1;
@@ -110,6 +114,7 @@ namespace AssetBundle {
                     FileUtils.mkdir(path.dirname(outPath));
                     fs.copyFileSync(path.join(bundleDir, value.path), outPath);
                 });
+                fs.writeFileSync(path.join(zipCacheDir, 'assetbundle_version'), `${newVersion}`);
                 const zipOutFile = path.join(packageOutputDir, `assetbundle_${key}_${versionItem}_${newVersion}.zip`);
                 const fileCount = FileUtils.fileCount(zipCacheDir, true);
                 await FileUtils.zipdir(zipCacheDir, zipOutFile);
@@ -121,9 +126,10 @@ namespace AssetBundle {
 
             FileUtils.rm(zipCacheOutputDir);//删除临时文件
 
+
+            fs.writeFileSync(path.join(bundleDir, 'assetbundle_version'), `${newVersion}`);
             const zipOutFile = path.join(packageOutputDir, `assetbundle_${key}_${newVersion}.zip`);
             const fileCount = FileUtils.fileCount(bundleDir, true);
-
             await FileUtils.zipdir(bundleDir, zipOutFile);
             const zipStat = fs.statSync(zipOutFile);
             const zipMD5 = MD5Utils.md5Dir(zipOutFile)[0].md5;
@@ -145,7 +151,7 @@ namespace AssetBundle {
 
         const configFileName = `assetbundle_${key}_${mainVersion}.json`;
         console.log(`保存 [${key}] 配置文件：${configFileName}`);
-        const configFilePath = path.join(outputDir, 'config', configFileName);
+        const configFilePath = path.join(configOutputDir, configFileName);
         FileUtils.mkdir(path.dirname(configFilePath));
 
 

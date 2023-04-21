@@ -69,16 +69,18 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         results.push(result);
         i > 0 && ciResult.push('line');
         if (result.size <= 0) {
-            ciResult.push(`AssetBundle${notitle ? '' : result.key}没有需要打包的更新`);
+            notitle ?
+                ciResult.push(`没有需要打包的更新`) :
+                ciResult.push(`AssetBundle [${result.key}] 没有需要打包的更新`);
             continue;
         }
-        notitle || ciResult.push(`AssetBundle${result.key}打包`);
+        notitle || ciResult.push(`**AssetBundle [${result.key}] 打包信息：**`);
         ciResult.push(`主包版本=${result.mainVersion}`);
         ciResult.push(`子包版本=${result.version}`);
+        ciResult.push(`子包大小=${(result.size / 1024 / 1024).toFixed(2)}MB`);
         ciResult.push(`新增文件=${result.added}`);
         ciResult.push(`修改文件=${result.changed}`);
         ciResult.push(`删除文件=${result.deleted}`);
-        ciResult.push(`子包大小=${(result.size / 1024 / 1024).toFixed(2)}MB`);
         if (result.supports && result.supports.length) {
             if (result.supports.length === 1)
                 ciResult.push(`增量支持版本=${result.supports.shift()}`);
@@ -86,7 +88,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                 ciResult.push(`增量支持版本=${result.supports.shift()} - ${result.supports.pop()}`);
         }
     }
-    const backup = ProcessUtils_1.default.getArg('--record', value => !!value && !value.startsWith('--'));
+    const backup = ProcessUtils_1.default.getArg('--backup', value => !!value && !value.startsWith('--'));
     if (backup) {
         const dateDir = (new Date()).toLocaleString().replace(/[\/\\:]/gm, '-');
         const backupDir = path_1.default.join(backup, dateDir);
