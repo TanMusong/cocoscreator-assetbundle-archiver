@@ -50,6 +50,12 @@ namespace AssetBundle {
 
         const bundleDir = path.join(projectDir, 'build', 'jsb-default', 'assets', key);
 
+        //修改入口脚本、配置的version
+        const abMainConfigPath = FileUtils.find(bundleDir, /config\.([a-zA-Z0-9\.]+\.)?json/);
+        fs.renameSync(abMainConfigPath, path.join(bundleDir, `config.${abVersion}.json`));
+        const abMainScriptPath = FileUtils.find(bundleDir, /index\.([a-zA-Z0-9\.]+\.)?js/);
+        fs.renameSync(abMainScriptPath, path.join(bundleDir, `index.${abVersion}${path.extname(abMainScriptPath)}`));
+
         //读取版本缓存
         const existVersions = readExistAssetBundleRecords(versionCacheDir);
 
@@ -92,11 +98,7 @@ namespace AssetBundle {
             FileUtils.mkdir(zipCacheOutputDir);
 
 
-            const configPath = FileUtils.find(bundleDir, /config\.([a-zA-Z0-9\.]+\.)?json/);
-            fs.renameSync(configPath, path.join(bundleDir, `config.${abVersion}.json`));
 
-            const scriptPath = FileUtils.find(bundleDir, /index\.([a-zA-Z0-9\.]+\.)?js/);
-            fs.renameSync(scriptPath, path.join(bundleDir, `index.${abVersion}${path.extname(scriptPath)}`));
 
 
             const supports: AssetBundleData[] = [];

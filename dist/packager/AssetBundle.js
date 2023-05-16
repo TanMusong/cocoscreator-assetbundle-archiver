@@ -30,6 +30,10 @@ var AssetBundle;
             console.log(`检查 [${key}] 构建记录缓存目录: ${versionCacheDir}`);
             FileUtils_1.default.mkdir(versionCacheDir);
             const bundleDir = path_1.default.join(projectDir, 'build', 'jsb-default', 'assets', key);
+            const abMainConfigPath = FileUtils_1.default.find(bundleDir, /config\.([a-zA-Z0-9\.]+\.)?json/);
+            fs_1.default.renameSync(abMainConfigPath, path_1.default.join(bundleDir, `config.${abVersion}.json`));
+            const abMainScriptPath = FileUtils_1.default.find(bundleDir, /index\.([a-zA-Z0-9\.]+\.)?js/);
+            fs_1.default.renameSync(abMainScriptPath, path_1.default.join(bundleDir, `index.${abVersion}${path_1.default.extname(abMainScriptPath)}`));
             const existVersions = readExistAssetBundleRecords(versionCacheDir);
             const previousRecord = existVersions && existVersions.length ?
                 readAssetBundleRecord(existVersions[existVersions.length - 1], versionCacheDir) :
@@ -57,10 +61,6 @@ var AssetBundle;
                 console.log(`Assetbundle [${key}] 变更，开始打包`);
                 const zipCacheOutputDir = path_1.default.join(outputDir, 'cache');
                 FileUtils_1.default.mkdir(zipCacheOutputDir);
-                const configPath = FileUtils_1.default.find(bundleDir, /config\.([a-zA-Z0-9\.]+\.)?json/);
-                fs_1.default.renameSync(configPath, path_1.default.join(bundleDir, `config.${abVersion}.json`));
-                const scriptPath = FileUtils_1.default.find(bundleDir, /index\.([a-zA-Z0-9\.]+\.)?js/);
-                fs_1.default.renameSync(scriptPath, path_1.default.join(bundleDir, `index.${abVersion}${path_1.default.extname(scriptPath)}`));
                 const supports = [];
                 const newVersion = previousRecord.version + 1;
                 for (const versionItem of existVersions) {
