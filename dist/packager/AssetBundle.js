@@ -20,7 +20,7 @@ var AssetBundle;
 (function (AssetBundle) {
     const START_VERSION = 1;
     const VERSION_SUPPORT = 50;
-    function pack(projectDir, platform, key, mainVersion, mode, xxtea, zipCompressJs, outputDir, recordDir) {
+    function pack(projectDir, platform, key, mainVersion, mode, xxtea, zipCompressJs, outputDir, recordDir, abVersion = 'assetbundle') {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(`-----------------------------------------------------AssetBundle [${key}] 打包开始-----------------------------------------------------`);
             console.log(`检查 [${key}] 构建目录: ${outputDir}`);
@@ -57,6 +57,10 @@ var AssetBundle;
                 console.log(`Assetbundle [${key}] 变更，开始打包`);
                 const zipCacheOutputDir = path_1.default.join(outputDir, 'cache');
                 FileUtils_1.default.mkdir(zipCacheOutputDir);
+                const configPath = FileUtils_1.default.find(bundleDir, /config\.([a-zA-Z0-9\.]+\.)?json/);
+                fs_1.default.renameSync(configPath, path_1.default.join(bundleDir, `config.${abVersion}.json`));
+                const scriptPath = FileUtils_1.default.find(bundleDir, /index\.([a-zA-Z0-9\.]+\.)?js/);
+                fs_1.default.renameSync(scriptPath, path_1.default.join(bundleDir, `index.${abVersion}${path_1.default.extname(scriptPath)}`));
                 const supports = [];
                 const newVersion = previousRecord.version + 1;
                 for (const versionItem of existVersions) {

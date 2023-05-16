@@ -36,6 +36,7 @@ namespace AssetBundle {
         zipCompressJs: boolean,
         outputDir: string,
         recordDir: string,
+        abVersion: string = 'assetbundle',
     ): Promise<Result> {
         console.log(`-----------------------------------------------------AssetBundle [${key}] 打包开始-----------------------------------------------------`);
 
@@ -89,6 +90,14 @@ namespace AssetBundle {
 
             const zipCacheOutputDir = path.join(outputDir, 'cache');
             FileUtils.mkdir(zipCacheOutputDir);
+
+
+            const configPath = FileUtils.find(bundleDir, /config\.([a-zA-Z0-9\.]+\.)?json/);
+            fs.renameSync(configPath, path.join(bundleDir, `config.${abVersion}.json`));
+
+            const scriptPath = FileUtils.find(bundleDir, /index\.([a-zA-Z0-9\.]+\.)?js/);
+            fs.renameSync(scriptPath, path.join(bundleDir, `index.${abVersion}${path.extname(scriptPath)}`));
+
 
             const supports: AssetBundleData[] = [];
             const newVersion = previousRecord.version + 1;
